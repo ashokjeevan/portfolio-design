@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Market Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Left Pane -->
+        <div class="left-pane">
+            <h2>Stock Tickers</h2>
+            <div class="ticker-input-container">
+                <input type="text" 
+                       id="ticker-input" 
+                       class="ticker-input" 
+                       placeholder="Enter ticker (e.g., AAPL, GOOG, NVDA)"
+                       title="Enter stock symbol">
+                <button id="add-ticker" class="add-button">Add</button>
+                <div id="error-message" class="error-message"></div>
+            </div>
+            <div class="ticker-list" id="ticker-list"></div>
+        </div>
+
+        <!-- Right Pane -->
+        <div class="right-pane">
+            <div id="chart-container">
+                <div id="empty-state">
+                    Select a ticker from the left to view its chart
+                </div>
+                <div id="tradingview-widget"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Ashok J. All rights reserved.</p>
+    </footer>
+
+    <script>
+        let widgetSymbols = [];
+
+        function createTickerItem(symbol) {
+            const tickerItem = document.createElement('div');
+            tickerItem.className = 'ticker-item';
+            
+            const tickerButton = document.createElement('button');
+            tickerButton.className = 'ticker-button';
+            tickerButton.textContent = symbol.s;
+            tickerButton.onclick = () => showChart(symbol);
+
+            const removeButton = document.createElement('button');
+            removeButton.className = 'remove-button';
+            removeButton.textContent = '×';
+            removeButton.onclick = (e) => {
+                e.stopPropagation();
+                removeTicker(symbol.s);
+            };
+
+            tickerItem.appendChild(tickerButton);
+            tickerItem.appendChild(removeButton);
+            return tickerItem;
+        }
+
+        function updateTickerList() {
+            const tickerList = document.getElementById('ticker-list');
+            tickerList.innerHTML = '';
+            widgetSymbols.forEach(symbol => {
+                tickerList.appendChild(createTickerItem(symbol));
+            });
+        }
+
+        function showChart(symbol) {
+            const container = document.getElementById('tradingview-widget');
+            const emptyState = document.getElementById('empty-state');
+            
+            // Hide empty state and show chart
+            emptyState.style.display = 'none';
+            container.style.display = 'block';
+            
+            // Clear previous widget
+            container.innerHTML = '';
+            
+            // Create new widget
+            new TradingView.widget({
+                "symbol": symbol.s,
+                "container_id": "tradingview-widget",
+                "width": "100%",
+                "height": "600",
+                "interval": "D",
+                "timezone": "exchange",
+                "theme": "light",
+                "style": "1",
+                "toolbar_bg": "#f1f3f6",
+                "enable_publishing": false,
+                "hide_top_toolbar": false,
+                "save_image": false,
+                "locale": "en"
+            });
+
+            // Highlight selected ticker
+            document.querySelectorAll('.ticker-button').forEach(button => {
+                button.classList.remove('active');
+                if (button.textContent === symbol.s) {
+                    button.classList.add('active');
+                }
+            });
+        }
+
+        function removeTicker(tickerSymbol) {
+            widgetSymbols = widgetSymbols.filter(symbol => symbol.s !== tickerSymbol);
+            updateTickerList();
+            
+            // Reset chart view if the current ticker is removed
+            const container = document.getElementById('tradingview-widget');
+            const emptyState = document.getElementById('empty-state');
+            container.innerHTML = '';
+            container.style.display = 'none';
+            emptyState.style.display = 'flex';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const tickerInput = document.getElementById('ticker-input');
+            const addButton = document.getElementById('add-ticker');
+            const errorMessage = document.getElementById('error-message');
+
+            addButton.addEventListener('click', function() {
+                const symbol = tickerInput.value.trim().toUpperCase();
+
+                if (!symbol) {
+                    errorMessage.textContent = 'Please enter a ticker symbol';
+                    return;
+                }
+
+                if (widgetSymbols.some(s => s.s === symbol)) {
+                    errorMessage.textContent = 'This ticker is already in the list';
+                    return;
+                }
+
+                widgetSymbols.push({
+                    "s": symbol,
+                    "d": symbol
+                });
+
+                tickerInput.value = '';
+                errorMessage.textContent = '';
+                updateTickerList();
+            });
+
+            // Add keyboard support
+            tickerInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    addButton.click();
+                }
+            });
+        });
+    </script>
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+</body>
+</html> 

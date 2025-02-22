@@ -1,0 +1,210 @@
+/* Basic responsive styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+}
+
+/* Left Pane Styles */
+.left-pane {
+    width: 300px;
+    background: #f5f5f5;
+    padding: 20px;
+    border-right: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.ticker-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.ticker-input {
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.ticker-input:focus {
+    border-color: #2962ff;
+    outline: none;
+}
+
+.add-button {
+    padding: 10px;
+    background-color: #2962ff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.add-button:hover {
+    background-color: #1e4bd8;
+}
+
+.add-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.error-message {
+    color: #ff0000;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.ticker-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ticker-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.ticker-button {
+    flex-grow: 1;
+    padding: 10px;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.ticker-button:hover {
+    background-color: #f0f0f0;
+}
+
+.ticker-button.active {
+    background-color: #e3f2fd;
+    color: #2962ff;
+}
+
+.remove-button {
+    background: none;
+    border: none;
+    color: #ff4444;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 10px;
+}
+
+.remove-button:hover {
+    background-color: #ffebee;
+}
+
+/* Right Pane Styles */
+.right-pane {
+    flex-grow: 1;
+    padding: 20px;
+    background: white;
+    position: relative;
+}
+
+#chart-container {
+    height: 100%;
+    width: 100%;
+}
+
+#empty-state {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    color: #666;
+    font-size: 18px;
+    text-align: center;
+}
+
+#tradingview-widget {
+    display: none;
+    height: 100%;
+    width: 100%;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .left-pane {
+        width: 100%;
+        max-height: 40vh;
+    }
+
+    .right-pane {
+        height: 60vh;
+    }
+}
+
+.current-tickers {
+    margin: 20px 0;
+    padding: 15px;
+    background: #f5f5f5;
+    border-radius: 8px;
+}
+
+.current-tickers h3 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.ticker-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.ticker-item {
+    display: flex;
+    align-items: center;
+    background: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    gap: 8px;
+}
+
+.remove-button {
+    background: none;
+    border: none;
+    color: #ff4444;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 0 4px;
+}
+
+.remove-button:hover {
+    color: #cc0000;
+} 
